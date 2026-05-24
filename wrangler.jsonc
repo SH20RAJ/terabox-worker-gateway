@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "terabox-worker-gateway",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-05-24",
+  "workers_dev": true,
+  "vars": {
+    "RATE_LIMIT": "30",
+    "RATE_WINDOW": "60",
+    "CACHE_TTL": "60",
+    "CACHE_MAX_SIZE": "500"
+  }
+}

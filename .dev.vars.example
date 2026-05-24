@@ -1,0 +1,2 @@
+PROXY_BASE_URL=https://your-proxy-worker.example.workers.dev/
+COOKIE_JSON=your_ndus_cookie_value
