@@ -11,10 +11,11 @@ This repository is Worker-only. It is designed to be small, deployable with Wran
 - Cloudflare Worker module syntax
 - `GET /api` for share metadata and proxy-mode passthrough
 - `GET /api2` for metadata plus resolved direct links when available
+- Optional upstream proxy Worker included in `proxy-worker/`
 - `GET /health` for uptime checks
 - `GET /help` for runtime API hints
 - Lightweight in-memory cache
-- Per-IP sliding-window rate limiting
+- Optional per-IP sliding-window rate limiting
 - CORS headers for browser clients
 - Secret-friendly configuration through Wrangler
 
@@ -24,7 +25,7 @@ This repository is Worker-only. It is designed to be small, deployable with Wran
 - npm
 - Cloudflare account
 - Wrangler, installed by this project through `npm install`
-- A compatible upstream proxy URL exposed as `PROXY_BASE_URL`
+- A compatible upstream proxy URL exposed as `PROXY_BASE_URL`, or deploy the included proxy Worker
 
 ## Quick Start
 
@@ -71,6 +72,12 @@ Deploy while uploading secrets from `.env`:
 npm run deploy:secrets
 ```
 
+Deploy the included upstream proxy Worker:
+
+```bash
+npm run proxy:deploy:secrets
+```
+
 ## Configuration
 
 | Name | Required | Default | Description |
@@ -78,7 +85,7 @@ npm run deploy:secrets
 | `PROXY_BASE_URL` | Yes | None | Base URL for a compatible upstream proxy Worker or API. |
 | `COOKIE_JSON` | Recommended | None | TeraBox cookie data. Accepts a raw `ndus` value or a JSON object. |
 | `TERABOX_COOKIES_JSON` | No | None | Alternative cookie JSON binding. |
-| `RATE_LIMIT` | No | `30` | Max requests per IP during the rate window. |
+| `RATE_LIMIT` | No | `0` | Max requests per IP during the rate window. `0` disables rate limiting. |
 | `RATE_WINDOW` | No | `60` | Rate limit window in seconds. |
 | `CACHE_TTL` | No | `60` | In-memory cache TTL in seconds. |
 | `CACHE_MAX_SIZE` | No | `500` | Maximum in-memory cache entries per Worker isolate. |
@@ -107,14 +114,20 @@ You can store non-sensitive values, such as `RATE_LIMIT`, in `wrangler.jsonc`.
 
 More detail is available in [docs/API.md](docs/API.md).
 
+The upstream proxy Worker is documented in [docs/PROXY_WORKER.md](docs/PROXY_WORKER.md).
+
 ## Project Structure
 
 ```text
 .
 ├── src/worker.js
+├── proxy-worker/
+│   ├── worker.js
+│   └── wrangler.jsonc
 ├── docs/
 │   ├── API.md
-│   └── DEPLOYMENT.md
+│   ├── DEPLOYMENT.md
+│   └── PROXY_WORKER.md
 ├── .dev.vars.example
 ├── wrangler.jsonc
 ├── package.json
@@ -127,7 +140,8 @@ More detail is available in [docs/API.md](docs/API.md).
 ## Development Notes
 
 - This project intentionally does not commit `.env`, `.dev.vars`, `.wrangler`, or `node_modules`.
-- `PROXY_BASE_URL` has no public default. Bring your own compatible proxy endpoint.
+- `PROXY_BASE_URL` has no public default. Bring your own compatible proxy endpoint or deploy `proxy-worker/`.
+- Production rate limiting is disabled by default through `RATE_LIMIT=0`; set a positive value to enable it.
 - In-memory cache and rate-limit state are per Worker isolate and are not durable storage.
 - Use this project responsibly and comply with the terms of any third-party service you access.
 

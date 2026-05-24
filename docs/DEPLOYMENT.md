@@ -33,6 +33,14 @@ npx wrangler secret put COOKIE_JSON
 
 `PROXY_BASE_URL` can be a plain var if the URL is public and not sensitive. `COOKIE_JSON` should be a secret.
 
+If you do not already have a compatible upstream proxy, deploy the included proxy Worker first:
+
+```bash
+npm run proxy:deploy:secrets
+```
+
+Use the deployed proxy URL as `PROXY_BASE_URL` for the gateway Worker.
+
 For one-shot deploys from a local env file:
 
 ```bash
@@ -73,5 +81,6 @@ The second command should return a validation error for the missing `url` or `mo
 
 - Cloudflare Worker secrets are not committed to git.
 - `.dev.vars` is only for local `wrangler dev`.
+- `RATE_LIMIT=0` disables gateway rate limiting for production. Set a positive number to enable it.
 - In-memory cache and rate-limit state reset when an isolate is evicted.
 - Use Cloudflare KV, Durable Objects, or D1 if you need durable shared state later.

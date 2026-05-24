@@ -755,7 +755,7 @@ function cachePut(shareUrl, data, password, env) {
 }
 
 function checkRateLimit(request, env) {
-  const maxRequests = getIntegerEnv(env, "RATE_LIMIT", 300000);
+  const maxRequests = getIntegerEnv(env, "RATE_LIMIT", 0);
   const windowSeconds = getIntegerEnv(env, "RATE_WINDOW", 60);
   if (maxRequests <= 0 || windowSeconds <= 0) {
     return null;

@@ -78,7 +78,7 @@ Success response:
 
 ## `GET /api?mode=...`
 
-Passes supported proxy modes through to the configured `PROXY_BASE_URL`.
+Passes supported proxy modes through to the configured `PROXY_BASE_URL`. You can provide your own compatible upstream proxy or deploy the included proxy Worker from `proxy-worker/`.
 
 Supported modes:
 
